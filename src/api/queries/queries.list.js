@@ -1,9 +1,9 @@
 export default{
     viewList:`
-     SELECT * FROM
-     items
-     WHERE cart_id = $1
-     AND is_deleted = true
+    SELECT * FROM
+    items
+    WHERE cart_id = $1
+    AND is_deleted = true
     `,
     addItem:`
     INSERT INTO items(cart_id, name, price, quantity)
@@ -33,5 +33,19 @@ export default{
     WHERE item_id = $1
     AND is_deleted = false
     RETURNING *
+    `,
+    setItemStatus:`
+    UPDATE items
+    SET update_at = NOW(),
+    status = $2
+    WHERE item_id = $1
+    AND is_deleted = false
+    `,
+    searchForItem:`
+    SELECT * FROM
+    items 
+    WHERE name ILIKE $2
+    AND user_id = $1
+    AND is_deleted = false
     `
 }

@@ -2,14 +2,23 @@ import db from "../../config/db/index.js";
 import queries from "../queries/queries.auth.js";
 
 export const checkUserExistsByEmail = async (email) => {
-    const user = await db.oneOrNone(queries.checkUserExistsByEmail, [ email.trim().toLowerCase() ]);
+    const user = await db.oneOrNone(queries.checkIfUserExistsByEmail, [ email.trim().toLowerCase() ]);
     return user;
-}
-export const createUser = async (email, display_name, google_hash, verificationCode, verificationCodeExpireAt) => {
+};
+export const createAdmin = async (email, display_name, google_hash, verificationCode, verificationCodeExpireAt) => {
     const user = await db.oneOrNone(queries.createUser, [
         email.trim().toLowerCase(),
         display_name.trim().toLowerCase(),
         google_hash,
+        verificationCode,
+        verificationCodeExpireAt
+    ]);
+    return user;
+};
+export const createUser = async (email, hash, verificationCode, verificationCodeExpireAt) => {
+    const user = await db.oneOrNone(queries.createUser, [
+        email.trim().toLowerCase(),
+        hash,
         verificationCode,
         verificationCodeExpireAt
     ]);

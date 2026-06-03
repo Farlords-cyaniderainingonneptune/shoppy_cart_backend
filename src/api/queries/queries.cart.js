@@ -63,7 +63,7 @@ export default{
     updateCartStatus:`
     UPDATE carts
     SET updated_at = NOW(),
-    status = $3
+    status = 'active'
     WHERE cart_id = $1
     AND user_id = $2
     RETURNING *
@@ -71,7 +71,7 @@ export default{
     updateCurrency:`
     UPDATE carts
     SET updated_at = NOW(),
-    currency = $2
+    currency = $3
     WHERE cart_id = $1
     AND user_id = $2
     RETURNING *
@@ -82,6 +82,19 @@ export default{
     WHERE cart_id = $1
     AND user_id = $2
     RETURNING *
+    `,
+    searchCartTitle:`
+    SELECT * FROM
+    carts 
+    WHERE title ILIKE $2
+    AND user_id = $1
+    AND is_deleted = false
+    `,
+    checkUserByCartId:`
+    SELECT id, user_id FROM 
+    carts
+    WHERE cart_id = $1
+    AND is_deleted = false
     `
 
 

@@ -10,19 +10,23 @@ const router = Router();
 
 router.post('/register',
      models(schema.signUp, 'payload'),
-     authController.register);
+     authController.register
+);
 
 router.post('/verify_account',
     models(schema.verify, 'payload'),
-    authController.verifyAccount);
+    authController.verifyAccount
+);
 
 router.post('/resend_verification_code',
      models(schema.resendVerification, 'payload'),
-    authController.resendVerificationCode);
+    authController.resendVerificationCode
+);
 
 router.post('/login', 
     models(schema.signIn, 'payload'), 
-    authController.login);
+    authController.login
+);
 
 router.post('/logout',
     authMiddleware.verifyToken,
@@ -35,7 +39,6 @@ router.get('/google',
         scope: ['profile', 'email']
     })
 );
-
 router.get('/google/callback',
     passport.authenticate('google', {
         failureRedirect: '/login'

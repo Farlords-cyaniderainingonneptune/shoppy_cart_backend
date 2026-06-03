@@ -32,7 +32,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS users(
 	id SERIAL,
 	user_id UUID PRIMARY KEY DEFAULT uuidv7(),
-	google_id VARCHAR(255) UNIQUE NOT NULL,
+	google_id VARCHAR(255) UNIQUE,
 	email VARCHAR(250) UNIQUE NOT NULL,
 	password TEXT,
 	display_name VARCHAR(255),
@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS users(
 	verification_code VARCHAR,
 	verification_code_expire_at TIMESTAMPTZ,
 	is_deleted BOOLEAN DEFAULT false,
+	logged_in BOOLEAN DEFAULT false,
 	last_login_at TIMESTAMPTZ,
 	created_at TIMESTAMPTZ DEFAULT NOW(),
 	updated_at TIMESTAMPTZ DEFAULT NOW(),

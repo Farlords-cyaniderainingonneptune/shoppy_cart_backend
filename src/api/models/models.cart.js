@@ -20,3 +20,46 @@ export const createCart = async(user_id, budget) => {
     const cart = await db.oneOrNone(queries.createCart[user_id, parseInt(budget || 0)]);
     return cart
 };
+
+export const editCartName = async(user_id, cart_id, cart_title, description) => {
+    const cart = await db.oneOrNone(queries.editCartName[user_id, cart_id, cart_title, description])
+    return cart;
+};
+
+export const updateCart = async (user_id, cart_id, cart_title, description, budget) => {
+    const cart = await db.oneOrNone(queries.updateCart[user_id, cart_id, cart_title, description, budget])
+    return cart;
+};
+
+export const updateCost = async (cart_id, total_cost )=>{
+    const cost = await db.oneOrNone(queries.updateCost[cart_id, total_cost])
+    return cost
+};
+
+export const deleteCart = async (cart_id, user_id) => {
+    const cart = await db.oneOrNone(queries.deleteCart[cart_id, user_id]);
+    return cart;
+};
+
+export const updateCartStatus = async (cart_id, user_id) => {
+    const cart = await db.oneOrNone(queries.updateCartStatus[cart_id, user_id]);
+    return cart;
+};
+
+export const updateCurrency = async (cart_id, user_id, currency) => {
+    const cart = await db.oneOrNone(queries.updateCurrency[cart_id, user_id, currency]);
+    return cart;
+};
+
+export const updateLastViewed = async (cart_id, user_id) => {
+    const cart = await db.oneOrNone(queries.updateLastViewed[cart_id, user_id]);
+    return cart;
+};
+export const checkUserByCartId = async (cart_id) => {
+    const cart = await db.oneOrNone(queries.checkUserByCartId[cart_id]);
+    return cart;
+};
+export const searchCartTitle = async (user_id, title) => {
+    const cart = await db.many(queries.searchCartTitle[user_id, title]);
+    return cart;
+};
