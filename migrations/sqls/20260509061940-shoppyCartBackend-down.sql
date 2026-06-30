@@ -1,3 +1,14 @@
+-- Delete sample items from sample grocery carts
+DELETE FROM items
+WHERE cart_id IN (
+  SELECT cart_id FROM carts 
+  WHERE cart_title = 'Sample_GroceriesXY70052'
+);
+
+-- Delete sample grocery carts
+DELETE FROM carts
+WHERE cart_title = 'Sample_GroceriesXY70052';
+
 DROP TABLE IF EXISTS prompts CASCADE;
 DROP TABLE IF EXISTS items CASCADE;
 DROP TABLE IF EXISTS carts CASCADE;

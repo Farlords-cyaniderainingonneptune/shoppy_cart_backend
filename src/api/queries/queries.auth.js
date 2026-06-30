@@ -7,15 +7,19 @@ export default {
     display_name
     FROM users 
     WHERE email = $1`,
+
     checkIfUserActivelyExistsByEmail: `SELECT * FROM users WHERE email = $1 AND status = 'active' AND is_deleted = false`,
+
     createAdmin: `
     INSERT INTO users (email, display_name, google_id, verification_code, verification_code_expire_at) 
     VALUES ($1, $2, $3, $4, $5) 
     RETURNING id, email, user_id, display_name, verification_code_expire_at, created_at`,
+
     createUser: `
     INSERT INTO users(email, password, verification_code, verification_code_expire_at) 
     VALUES ($1, $2, $3, $4) 
     RETURNING id, email, user_id, display_name, verification_code_expire_at, created_at`,
+
     checkIfUserActivelyExistsBygoogleId: `
     SELECT id, user_id, 
     email, google_id, 
@@ -25,6 +29,7 @@ export default {
     AND is_deleted = false
     AND status = 'active'
     `,
+
     checkIfUserActivelyExistsByUserId: `
     SELECT id, user_id, 
     email, google_id, 
@@ -35,6 +40,7 @@ export default {
     AND is_deleted = false
     AND status = 'active'
     `,
+
     updateUserAccountVerification: `
     UPDATE users
     SET updated_at = NOW(),
@@ -44,6 +50,7 @@ export default {
     verification_code_expire_at = NULL
     WHERE email = $1
     RETURNING id, user_id, email, display_name, is_verified_account, status, created_at, updated_at`,
+
     updateUserVerificationCode: `
     UPDATE users 
     SET updated_at = NOW(), 
@@ -51,6 +58,7 @@ export default {
     verification_code_expire_at = $3 
     WHERE email = $1 
     RETURNING id, user_id, email, verification_code_expire_at`,
+
     checkIfUserActivelyExistsByUserId: `
     SELECT id, user_id, 
     email, display_name, is_verified_account, 
@@ -59,6 +67,7 @@ export default {
     WHERE user_id = $1 
     AND is_deleted = false 
     AND status = 'active'`,
+
     checkIfUserExistsByUserId: `
     SELECT id, user_id, ip_address,
     email, username, is_verified_account, 
@@ -94,6 +103,7 @@ export default {
     password= $2 
     WHERE email = $1 
     RETURNING id, user_id, email, full_name`,
+
     checkIfActualAdmin: `
     SELECT user_id, role, status 
     FROM users 
@@ -101,24 +111,28 @@ export default {
     AND roles = $2
     AND status = $3
     `,
+
     checkIfWasAdmin: `
     SELECT user_id, role, status 
     FROM users 
     WHERE user_id = $1 
     AND role = $2
     `,
+
     checkIfUserActive:`
     SELECT user_id, status 
     FROM users 
     WHERE user_id= $1 AND status= 'active'
     AND is_deleted = false
     `,
+
     countUser:`
     SELECT COUNT(id)
     FROM users 
     WHERE is_verified_account = true
     AND is_deleted = false
     `,
+
     fetchRecentUsers:`
     SELECT * FROM users
     WHERE is_deleted = false
@@ -126,11 +140,13 @@ export default {
     ORDER BY last_login_at DESC NULLS LAST
     LIMIT $1
     `,
+
     isLoggedIn:`
     SELECT user_id, display_name, status
     FROM users 
     WHERE user_id = $1 AND logged_in = true
     `,
+
     updateUseronLogout:`
     UPDATE users
     SET updated_at = NOW(),
@@ -148,6 +164,7 @@ export default {
     WHERE user_id = $1
     RETURNING user_id, logged_in
     `,
+
     updateAdminOnLogout: `UPDATE users 
     SET updated_at = NOW(), 
     last_login_at = NOW(), 
@@ -157,6 +174,7 @@ export default {
     WHERE user_id = $1
     RETURNING *
     `,
+
     checkIfAdmin:
     `SELECT user_id, status, role
     FROM users
@@ -164,6 +182,7 @@ export default {
     AND roles IN ('admin')
     AND status = 'active' 
     `,
+
     editUserInfo:`
     UPDATE users
     SET updated_at = NOW(),
@@ -171,6 +190,7 @@ export default {
     WHERE user_id = $1
     RETURNING user_id, email, full_name
     `,
+
     updateVerifiedAdmin:`
     UPDATE users
     SET updated_at = NOW(),
@@ -182,10 +202,12 @@ export default {
     WHERE email = $1
     RETURNING id, user_id, email, full_name, is_verified_account, status, role, created_at, updated_at
    `,
+
     createOAuthUser: `
     INSERT INTO users (email, display_name, google_id, is_verified_account, status)
     VALUES ($1, $2, $3, true, 'active')
     RETURNING id, user_id, email, display_name, google_id, is_verified_account, status, created_at`,
+
     updateUserGoogleId: `
     UPDATE users
     SET updated_at = NOW(),
@@ -193,12 +215,14 @@ export default {
     is_verified_account = true
     WHERE email = $1
     RETURNING id, user_id, email, display_name, google_id, is_verified_account, status`,
+
     checkUserExistsByGoogleId: `
     SELECT id, user_id, email, display_name, google_id, is_verified_account, status
     FROM users
     WHERE google_id = $1
     AND is_deleted = false
-    LIMIT 1`,
+    LIMIT 1 `,
+
     findUserById: `
     SELECT id, user_id, email, display_name, google_id, is_verified_account, status
     FROM users

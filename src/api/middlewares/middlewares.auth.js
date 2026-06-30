@@ -37,7 +37,6 @@ export const verifyToken = async function (req, res, next) {
         }
         const errorMessage = user.status === 'inactive' ? 'User account is inactive, kindly verify your account in your email, or request another verification' :
             `User account is ${user.status}, kindly contact support team`;
-
         if (user && user.status !== 'active') {
             return res.status(401).json({
                 status: 'error',

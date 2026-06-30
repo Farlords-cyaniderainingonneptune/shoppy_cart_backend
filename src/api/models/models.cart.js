@@ -2,7 +2,7 @@ import db from "../../config/db/index.js";
 import queries from "../queries/queries.cart.js";
 
 export const getAllCarts = async (limit, user_id) => {
-    const carts = await db.any(queries.getAllCarts[parseInt(limit || 10), user_id]);
+    const carts = await db.any(queries.getAllCarts[parseInt(limit || 30), user_id]);
     return carts;
 };
 

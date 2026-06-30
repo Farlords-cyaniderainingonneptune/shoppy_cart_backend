@@ -90,3 +90,36 @@ CREATE TABLE IF NOT EXISTS prompts(
 	prompted_at TIMESTAMPTZ DEFAULT NOW(),
 	deleted_at TIMESTAMPTZ
 );
+
+
+INSERT INTO carts (user_id, cart_title, description, budget)
+SELECT user_id, 'Sample_GroceriesXY70052', 'This is a cart sample containing groceries.', 500.00
+FROM users
+WHERE is_deleted = false
+AND NOT EXISTS (
+    SELECT 1 FROM carts 
+    WHERE carts.user_id = users.user_id 
+      AND carts.cart_title = 'Sample_GroceriesXY70052'
+  );
+
+INSERT INTO items (name, cart_id, price, quantity, category, status)
+SELECT 
+    v.name,
+    c.cart_id,
+    v.price,
+    v.quantity,
+    ic.id,
+    'unpurchased'::item_status
+FROM (
+    VALUES
+        ('Milk', 3.99, 2, 'Dairy'),
+        ('Cheese', 5.49, 1, 'Dairy'),
+        ('Broccoli', 2.99, 3, 'Vegetables'),
+        ('Tomatoes', 1.99, 5, 'Vegetables'),
+        ('Chicken Breast', 8.99, 2, 'Meat'),
+        ('Ground Beef', 6.99, 1, 'Meat'),
+        ('Bread', 2.49, 1, 'Expendables'),
+        ('Eggs', 4.99, 2, 'Dairy')
+) AS v(name, price, quantity, category_name)
+JOIN carts c ON c.cart_title = 'Sample_GroceriesXY70052'
+JOIN item_categories ic ON ic.name = v.category_name;

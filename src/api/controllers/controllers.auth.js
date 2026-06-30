@@ -207,7 +207,7 @@ export const login = async (req, res) => {
         return res.status(401).json({
             status: 'error',
             code: 401,
-            message: 'Invalid credentials'
+            message: 'Invalid login credentials'
         })
     };
 
