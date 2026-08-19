@@ -47,5 +47,17 @@ export default{
     WHERE name ILIKE $2
     AND user_id = $1
     AND is_deleted = false
+    `,
+    updateTotalCost:`
+    UPDATE cart
+    SET updated_at = NOW(),
+    total_cost = $2
+    WHERE cart_id = $1
+    `,
+    checkIfItemExist:`
+    SELECT * FROM
+    items
+    WHERE item_id = $1
+    AND is_deleted = false
     `
 }

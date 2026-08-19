@@ -7,7 +7,7 @@ export const viewList = async (cart_id) => {
 };
 
 export const addItem = async (cart_id, name, price, quantity) => {
-    const item = await db.oneOrNone(queries.addItem[cart_id, name, price, quantity]);
+    const item = await db.oneOrNone(queries.addItem[cart_id, name, price, quantity || 1]);
     return item;
 };
 
@@ -31,5 +31,13 @@ export const setItemStatus = async (item_id, status) => {
 };
 export const searchForItem = async (user_id, title) => {
     const item = await db.many(queries.searchForItem[user_id, title]);
+    return item;
+};
+export const updateTotalCost = async (cart_id, total_cost) => {
+    const cost = await db.oneOrNone(queries.updateTotalCost[cart_id, total_cost]);
+    return cost;
+};
+export const checkIfItemExists = async (item_id) => {
+    const item = await db.oneOrNone(queries.checkIfItemExists[item_id]);
     return item;
 };

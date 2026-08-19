@@ -44,5 +44,13 @@ router.post('/:cart_id',
     authMiddleware.verifyToken,
     listController.addItem
 );
+router.patch('/:item_id',
+    authMiddleware.verifyToken,
+    listController.editItem
+);
+router.delete('/:item_id',
+    authMiddleware.verifyToken,
+    listController.deleteItem
+);
 
 export default router;
