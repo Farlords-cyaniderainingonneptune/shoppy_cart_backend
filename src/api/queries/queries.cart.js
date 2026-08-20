@@ -2,18 +2,25 @@ export default{
     getAllCarts:`
     SELECT * FROM
     carts
-    WHERE user_id = $2
+    WHERE user_id = $3
     AND is_deleted = false
     ORDER BY created_at DESC
-    LIMIT $1
+    OFFSET $1
+    LIMIT $2
     `,
-    getCurrentsCarts:`
+    getCurrentCarts:`
     SELECT * FROM
     carts
-    WHERE user_id = $2
+    WHERE user_id = $1
     AND is_deleted = false
     ORDER BY last_viewed_at DESC
-    LIMIT $1
+    LIMIT 10
+    `,
+    countCarts:`
+    SELECT COUNT(cart_id) FROM
+    carts
+    WHERE user_id = $1
+    AND is_deleted = false
     `,
     checkIfCartExists:`
     SELECT * FROM

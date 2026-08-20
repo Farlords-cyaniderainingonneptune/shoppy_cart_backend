@@ -69,8 +69,8 @@ export default {
     AND status = 'active'`,
 
     checkIfUserExistsByUserId: `
-    SELECT id, user_id, ip_address,
-    email, username, is_verified_account, 
+    SELECT id, user_id,
+    email, is_verified_account, 
     status, created_at, verification_code,
     verification_code_expire_at
     FROM users 

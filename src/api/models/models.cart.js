@@ -1,65 +1,69 @@
 import db from "../../config/db/index.js";
 import queries from "../queries/queries.cart.js";
 
-export const getAllCarts = async (limit, user_id) => {
-    const carts = await db.any(queries.getAllCarts[parseInt(limit || 30), user_id]);
+export const getAllCarts = async (offset,limit,user_id) => {
+    const carts = await db.any(queries.getAllCarts,[parseInt(offset),parseInt(limit)||10, user_id]);
     return carts;
 };
 
-export const getCurrentCarts = async(limit, user_id) => {
-    const carts = await db.any(queries.getCurrentCarts[limit || 10, user_id]);
+export const getCurrentCarts = async (user_id) => {
+    const carts = await db.any(queries.getCurrentCarts,[user_id]);
     return carts
 };
 
+export const countCarts = async (user_id) => {
+    const carts = await db.oneOrNone(queries.countCarts,[user_id]);
+    return carts
+};
 export const checkIfCartExists = async(cart_id, user_id) => {
-    const cart = await db.oneOrNone(queries.checkIfCartExists[cart_id, user_id]);
+    const cart = await db.oneOrNone(queries.checkIfCartExists,[cart_id, user_id]);
     return cart
 };
 
 export const createCart = async(user_id, budget) => {
-    const cart = await db.oneOrNone(queries.createCart[user_id, parseInt(budget || 0)]);
+    const cart = await db.oneOrNone(queries.createCart,[user_id, parseInt(budget)||0]);
     return cart
 };
 
 export const editCartName = async(user_id, cart_id, cart_title, description) => {
-    const cart = await db.oneOrNone(queries.editCartName[user_id, cart_id, cart_title, description])
+    const cart = await db.oneOrNone(queries.editCartName,[user_id, cart_id, cart_title, description])
     return cart;
 };
 
 export const updateCart = async (user_id, cart_id, cart_title, description, budget) => {
-    const cart = await db.oneOrNone(queries.updateCart[user_id, cart_id, cart_title, description, budget])
+    const cart = await db.oneOrNone(queries.updateCart,[user_id, cart_id, cart_title, description, budget])
     return cart;
 };
 
 export const updateCost = async (cart_id, total_cost )=>{
-    const cost = await db.oneOrNone(queries.updateCost[cart_id, total_cost])
+    const cost = await db.oneOrNone(queries.updateCost,[cart_id, total_cost])
     return cost
 };
 
 export const deleteCart = async (cart_id, user_id) => {
-    const cart = await db.oneOrNone(queries.deleteCart[cart_id, user_id]);
+    const cart = await db.oneOrNone(queries.deleteCart,[cart_id, user_id]);
     return cart;
 };
 
 export const updateCartStatus = async (cart_id, user_id) => {
-    const cart = await db.oneOrNone(queries.updateCartStatus[cart_id, user_id]);
+    const cart = await db.oneOrNone(queries.updateCartStatus,[cart_id, user_id]);
     return cart;
 };
 
 export const updateCurrency = async (cart_id, user_id, currency) => {
-    const cart = await db.oneOrNone(queries.updateCurrency[cart_id, user_id, currency]);
+    const cart = await db.oneOrNone(queries.updateCurrency,[cart_id, user_id, currency]);
     return cart;
 };
 
 export const updateLastViewed = async (cart_id, user_id) => {
-    const cart = await db.oneOrNone(queries.updateLastViewed[cart_id, user_id]);
+    const cart = await db.oneOrNone(queries.updateLastViewed,[cart_id, user_id]);
     return cart;
 };
 export const checkUserByCartId = async (cart_id) => {
-    const cart = await db.oneOrNone(queries.checkUserByCartId[cart_id]);
+    const cart = await db.oneOrNone(queries.checkUserByCartId,[cart_id]);
     return cart;
 };
 export const searchCartTitle = async (user_id, title) => {
-    const cart = await db.many(queries.searchCartTitle[user_id, title]);
+    const cart = await db.many(queries.searchCartTitle, [user_id, title]);
     return cart;
 };

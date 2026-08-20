@@ -6,7 +6,7 @@ import * as authMiddleware from '../middlewares/middlewares.auth.js';
 const router = Router();
 // Allows you to view all the av ailable carts
 router.get('/',
-authMiddleware.verifyToken,
+    authMiddleware.verifyToken,
     cartController.viewAllCarts
 );
 // Allows you to see the carts ordered by the recently opened

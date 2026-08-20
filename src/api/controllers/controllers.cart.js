@@ -3,8 +3,19 @@ import * as cartModel from '../models/models.cart.js';
 
 export const viewAllCarts = async (req, res) => {
     const userId = req.user.user_id;
+    const {query} = req;
     try{
-        const viewAllCarts = await cartModel.getAllCarts(userId);
+        if (parseInt(query.per_page)>100){
+            return res.status(422).json({
+                status:'error',
+                code:422,
+                message:'per_page cannot be greater than 100'
+            });
+        };
+        const {offset, limit} = Helpers.paginationOffsetLimit(query);
+        const viewAllCarts = await cartModel.getAllCarts(offset, limit, userId);
+        const countCarts = await cartModel.countCarts(userId);
+        const totalPages = Helpers.paginationTotalPages(countCarts.count, limit);
         if(!viewAllCarts){
             return res.status(404).json ({
                 status:'error',
@@ -16,7 +27,12 @@ export const viewAllCarts = async (req, res) => {
             status:'success',
             code:200,
             message:'Carts retrieved successfully',
-            data:viewAllCarts
+            data:{ 
+                    page: parseInt(query.page)||1,
+                    total_count: parseInt(countCarts.count),
+                    total_pages: parseInt(totalPages),
+                    viewAllCarts
+            }
         });
     }catch(error){
         return res.status(500).json({
@@ -80,9 +96,9 @@ export const recentlyViewed = async (req, res) => {
 };
 
 export const createCart = async (req, res) => {
-    const userId = req.user.user_id
+    const userId = req.user.user_id;
     try{
-        const {budget}= req.body
+        const {budget}= req.body;
         const createCart = await cartModel.createCart(userId, budget)
         if (!createCart){
             return res.status(422).json({
