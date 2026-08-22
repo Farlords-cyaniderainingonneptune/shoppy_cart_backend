@@ -74,7 +74,7 @@ export const recentlyViewed = async (req, res) => {
     try{
         const recentCarts = await cartModel.getCurrentCarts(userId)
         if(!recentCarts){
-            return res.status(404)({
+            return res.status(404).json({
                 status:'error',
                 code:404,
                 message:'Recent carts not found'
@@ -98,8 +98,8 @@ export const recentlyViewed = async (req, res) => {
 export const createCart = async (req, res) => {
     const userId = req.user.user_id;
     try{
-        const {budget}= req.body;
-        const createCart = await cartModel.createCart(userId, budget)
+        const {budget, title}= req.body;
+        const createCart = await cartModel.createCart(userId, title??'untitled', budget)
         if (!createCart){
             return res.status(422).json({
                 status:'error',
@@ -124,15 +124,23 @@ export const createCart = async (req, res) => {
 
 export const addTitle = async (req, res) => {
     const userId = req.user.user_id
-    const {cartId} = req.params.cart_id;
+    const {cart_id} = req.params;
     try{
-        const {cart_title, description}= req.body
-        const editTitle = await cartModel.editCartName(userId, cartId, description)
+        const {cart_title, description}= req.body;
+        const cartExists = await cartModel.checkIfCartExists(cart_id, userId);
+        if(!cartExists){
+            return res.status(404).json({
+                status:'error',
+                code:404,
+                message:'Unable to find cart'
+            });
+        }
+        const editTitle = await cartModel.editCartTitle(userId, cart_id, cart_title, description)
         if (!editTitle){
             return res.status(422).json({
                 status:'error',
-                code:403,
-                message:'Unable to create cart'
+                code:422,
+                message:'Unable edit title'
             });
         };
         return res.status(200).json({
@@ -152,7 +160,7 @@ export const addTitle = async (req, res) => {
 
 export const editDeleteCart = async (req, res) => {
     const userId = req.user.user_id
-    const {cartId} = req.params.cart_id;
+    const {cart_id} = req.params;
     const {action=['edit', 'delete']} = req.query;
     try{
         if (!action){
@@ -162,7 +170,7 @@ export const editDeleteCart = async (req, res) => {
                 message:'cannot complete action'
             });
         };
-        const cartExists = await cartModel.checkIfCartExists(cartId, userId);
+        const cartExists = await cartModel.checkIfCartExists(cart_id, userId);
         if (!cartExists){
             return res.status(404).json({
                 status:'error',
@@ -172,7 +180,7 @@ export const editDeleteCart = async (req, res) => {
         };
         if (action === 'edit'){
             const {cart_title, description, budget}= req.body
-            const updateCart = await cartModel.updateCart(userId, cartId, description, budget)
+            const updateCart = await cartModel.updateCart(userId, cart_id, description, budget)
             if (!updateCart){
                 return res.status(422).json({
                     status:'error',
@@ -188,7 +196,7 @@ export const editDeleteCart = async (req, res) => {
             });
         };
         if (action === 'delete'){
-            const deleteCart = await cartModel.deleteCart(cartId, userId);
+            const deleteCart = await cartModel.deleteCart(cart_id, userId);
             if(!deleteCart){
                 return res.status(422).json({
                     status:'error',
@@ -202,7 +210,7 @@ export const editDeleteCart = async (req, res) => {
                 message:'Cart deleted successfully',
                 data: deleteCart
             });
-        }
+        };
         
     }catch(error){
         return res.status(500).json({

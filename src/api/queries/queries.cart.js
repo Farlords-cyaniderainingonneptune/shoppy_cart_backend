@@ -1,5 +1,111 @@
-export default{
-    getAllCarts:`
+// export default{
+//     getAllCarts:`
+//     SELECT * FROM
+//     carts
+//     WHERE user_id = $3
+//     AND is_deleted = false
+//     ORDER BY created_at DESC
+//     OFFSET $1
+//     LIMIT $2
+//     `,
+//     getCurrentCarts:`
+//     SELECT * FROM
+//     carts
+//     WHERE user_id = $1
+//     AND is_deleted = false
+//     ORDER BY last_viewed_at DESC
+//     LIMIT $2
+//     `,
+//     countCarts:`
+//     SELECT COUNT(cart_id) FROM
+//     carts
+//     WHERE user_id = $1
+//     AND is_deleted = false
+//     `,
+//     checkIfCartExists:`
+//     SELECT * FROM
+//     carts
+//     WHERE cart_id = $1
+//     AND user_id = $2
+//     `,
+//     createCart:`
+//     INSERT INTO carts (user_id, budget)
+//     VALUES ($1, $2)
+//     RETURNING *
+//     `,
+//     editCartName:`
+//     UPDATE carts
+//     SET updated_at = NOW(),
+//     cart_title = COALESCE ($3, cart_title),
+//     description = COALESCE($4, description)
+//     WHERE cart_id = $2
+//     AND user_id = $1
+//     RETURNING *
+//     `,
+//     updateCart:`
+//     UPDATE carts
+//     SET updated_at = NOW(),
+//     cart_title = COALESCE ($3, cart_title),
+//     description = COALESCE($4, description),
+//     budget = COALESCE($5, budget)
+//     WHERE cart_id = $2
+//     AND user_id = $1
+//     RETURNING *
+//     `,
+//     updateCost:`
+//     UPDATE carts
+//     SET updated_at = NOW(),
+//     total_cost = COALESCE($2, total_cost)
+//     WHERE cart_id = $1
+//     RETURNING *
+//     `,
+//     deleteCart:`
+//     UPDATE carts
+//     SET updated_at = NOW(),
+//     is_deleted = true
+//     WHERE cart_id = $1
+//     AND user_id = $2
+//     RETURNING *
+//     `,
+//     updateCartStatus:`
+//     UPDATE carts
+//     SET updated_at = NOW(),
+//     status = 'active'
+//     WHERE cart_id = $1
+//     AND user_id = $2
+//     RETURNING *
+//     `,
+//     updateCurrency:`
+//     UPDATE carts
+//     SET updated_at = NOW(),
+//     currency = $3
+//     WHERE cart_id = $1
+//     AND user_id = $2
+//     RETURNING *
+//     `,
+//     updateLastViewed:`
+//     UPDATE carts
+//     SET last_viewed_at = NOW()
+//     WHERE cart_id = $1
+//     AND user_id = $2
+//     RETURNING *
+//     `,
+//     searchCartTitle:`
+//     SELECT * FROM
+//     carts 
+//     WHERE title ILIKE $2
+//     AND user_id = $1
+//     AND is_deleted = false
+//     `,
+//     checkUserByCartId:`
+//     SELECT id, user_id FROM 
+//     carts
+//     WHERE cart_id = $1
+//     AND is_deleted = false
+//     `
+// }
+export default {
+    getAllCarts: `
     SELECT * FROM
     carts
     WHERE user_id = $3
@@ -8,7 +114,7 @@ export default{
     OFFSET $1
     LIMIT $2
     `,
-    getCurrentCarts:`
+    getCurrentCarts: `
     SELECT * FROM
     carts
     WHERE user_id = $1
@@ -16,50 +122,52 @@ export default{
     ORDER BY last_viewed_at DESC
     LIMIT 10
     `,
-    countCarts:`
+    countCarts: `
     SELECT COUNT(cart_id) FROM
     carts
     WHERE user_id = $1
     AND is_deleted = false
     `,
-    checkIfCartExists:`
+    checkIfCartExists: `
     SELECT * FROM
     carts
     WHERE cart_id = $1
     AND user_id = $2
+    AND is_deleted = false
     `,
-    createCart:`
-    INSERT INTO carts (user_id, budget)
-    VALUES ($1, $2)
+    createCart: `
+    INSERT INTO carts (user_id, cart_title, budget)
+    VALUES ($1, $2, $3)
     RETURNING *
     `,
-    editCartName:`
+    editCartName: `
     UPDATE carts
     SET updated_at = NOW(),
-    cart_title = COALESCE ($4, cart_title),
-    description = COALESCE($3, description)
+    cart_title = COALESCE($3, cart_title),
+    description = COALESCE($4, description)
     WHERE cart_id = $2
     AND user_id = $1
     RETURNING *
     `,
-    updateCart:`
+    updateCart: `
     UPDATE carts
     SET updated_at = NOW(),
-    cart_title = COALESCE ($3, cart_title),
+    cart_title = COALESCE($3, cart_title),
     description = COALESCE($4, description),
     budget = COALESCE($5, budget)
     WHERE cart_id = $2
     AND user_id = $1
     RETURNING *
     `,
-    updateCost:`
+    updateCost: `
     UPDATE carts
     SET updated_at = NOW(),
-    total_cost = COALESCE($2, total_cost),
-    cart_id = $1
+    total_cost = COALESCE($3, total_cost)
+    WHERE cart_id = $1
+    AND user_id = $2
     RETURNING *
     `,
-    deleteCart:`
+    deleteCart: `
     UPDATE carts
     SET updated_at = NOW(),
     is_deleted = true
@@ -67,7 +175,7 @@ export default{
     AND user_id = $2
     RETURNING *
     `,
-    updateCartStatus:`
+    updateCartStatus: `
     UPDATE carts
     SET updated_at = NOW(),
     status = 'active'
@@ -75,7 +183,7 @@ export default{
     AND user_id = $2
     RETURNING *
     `,
-    updateCurrency:`
+    updateCurrency: `
     UPDATE carts
     SET updated_at = NOW(),
     currency = $3
@@ -83,26 +191,24 @@ export default{
     AND user_id = $2
     RETURNING *
     `,
-    updateLastViewed:`
+    updateLastViewed: `
     UPDATE carts
     SET last_viewed_at = NOW()
     WHERE cart_id = $1
     AND user_id = $2
     RETURNING *
     `,
-    searchCartTitle:`
+    searchCartTitle: `
     SELECT * FROM
     carts 
-    WHERE title ILIKE $2
+    WHERE cart_title ILIKE $2
     AND user_id = $1
     AND is_deleted = false
     `,
-    checkUserByCartId:`
-    SELECT id, user_id FROM 
+    checkUserByCartId: `
+    SELECT user_id FROM 
     carts
     WHERE cart_id = $1
     AND is_deleted = false
     `
-
-
 }

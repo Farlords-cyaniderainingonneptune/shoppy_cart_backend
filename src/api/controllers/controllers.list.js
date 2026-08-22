@@ -4,9 +4,9 @@ import * as listModel from '../models/models.list.js';
 
 export const viewList = async (req, res) => {
     const userId = req.user.user_id;
-    const {cartId} = req.params.cart_id;
+    const {cart_id} = req.params;
     try{
-        const cartExists = await cartModel.checkIfCartExists(cartId);
+        const cartExists = await cartModel.checkIfCartExists(cart_id);
         if(!cartExists){
            return res.status(404).json({
                 status:'error',
@@ -14,7 +14,7 @@ export const viewList = async (req, res) => {
                 message:'Cart does not exist'
             }); 
         };
-        const cartList = await listModel.viewList(cartId);
+        const cartList = await listModel.viewList(cart_id);
         if(!cartList){
             return res.status(404).json({
                 status:'error',

@@ -20,13 +20,13 @@ export const checkIfCartExists = async(cart_id, user_id) => {
     return cart
 };
 
-export const createCart = async(user_id, budget) => {
-    const cart = await db.oneOrNone(queries.createCart,[user_id, parseInt(budget)||0]);
+export const createCart = async(user_id, cart_title, budget) => {
+    const cart = await db.oneOrNone(queries.createCart,[user_id, cart_title.trim(), parseInt(budget)||0]);
     return cart
 };
 
-export const editCartName = async(user_id, cart_id, cart_title, description) => {
-    const cart = await db.oneOrNone(queries.editCartName,[user_id, cart_id, cart_title, description])
+export const editCartTitle = async(user_id, cart_id, cart_title, description) => {
+    const cart = await db.oneOrNone(queries.editCartName,[user_id, cart_id, cart_title.trim(),description.trim().toLowerCase()]);
     return cart;
 };
 
